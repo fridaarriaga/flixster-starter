@@ -10,7 +10,7 @@ const CARD_TRANSITION_MS = 450;
 const MOODS = [
   { key: "action", label: "Action", genreIds: [28, 12, 878], color: "#2ef5c7" },
   { key: "funny", label: "Funny", genreIds: [35, 10751], color: "#f7cd5e" },
-  { key: "dark", label: "Dark", genreIds: [53, 27, 9648, 80], color: "#8d94ff" },
+  { key: "dark", label: "Dark", genreIds: [53, 27, 80], color: "#8d94ff" },
   { key: "romance", label: "Romance", genreIds: [10749], color: "#ff77bf" },
   { key: "thriller", label: "Thriller", genreIds: [53, 9648, 80], color: "#79f0ff" },
   { key: "fantasy", label: "Fantasy", genreIds: [14, 12, 16], color: "#61ff7c" },
@@ -195,6 +195,18 @@ const HomeFeed = ({ onMovieClick }) => {
     });
   };
 
+  const handleOpenMovieModal = (event) => {
+    event.stopPropagation();
+
+    if (!onMovieClick || !activeMovie?.id) {
+      return;
+    }
+
+    const cardElement = event.currentTarget.closest(".home-feed__phone-card");
+    const cardRect = cardElement ? cardElement.getBoundingClientRect() : null;
+    onMovieClick(activeMovie.id, cardRect);
+  };
+
   const handleMoodChange = (nextMood) => {
     if (!nextMood || nextMood === activeMood) {
       return;
@@ -258,6 +270,15 @@ const HomeFeed = ({ onMovieClick }) => {
           >
             <img src="/tiktok-logo.png" alt="TikTok" />
           </a>
+          <button
+            className="home-feed__modal-link"
+            type="button"
+            aria-label={`Open ${activeMovie.title} details`}
+            onClick={handleOpenMovieModal}
+            onPointerUp={(event) => event.stopPropagation()}
+          >
+            i
+          </button>
           {imageUrl ? (
             <img className="home-feed__poster" src={imageUrl} alt={`${activeMovie.title} poster`} />
           ) : (

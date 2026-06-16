@@ -68,6 +68,25 @@
   display: block;
 }
 
+.home-feed__modal-link {
+  position: absolute;
+  top: 54px;
+  right: 8px;
+  z-index: 5;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(8, 10, 22, 0.85);
+  color: #f2f4ff;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
 .home-feed__orbit-ring {
   position: absolute;
   z-index: 0;
@@ -320,6 +339,14 @@
     top: 7px;
     right: 7px;
     font-size: 1.2rem;
+  }
+
+  .home-feed__modal-link {
+    top: 49px;
+    right: 7px;
+    width: 30px;
+    height: 30px;
+    font-size: 0.95rem;
   }
 }
 
