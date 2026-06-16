@@ -4,6 +4,23 @@ import MovieList from "./components/movieList/MovieList";
 import MovieModal from "./components/movieModal/MovieModal";
 import "./App.css";
 
+const POPCORN = [
+  { left: "4%", top: "18%", rot: -20, scale: 1.1 },
+  { left: "9%", top: "62%", rot: 12, scale: 0.85 },
+  { left: "15%", top: "30%", rot: -5, scale: 0.95 },
+  { left: "21%", top: "70%", rot: 25, scale: 1.0 },
+  { left: "28%", top: "15%", rot: -15, scale: 0.8 },
+  { left: "36%", top: "65%", rot: 8, scale: 1.05 },
+  { left: "44%", top: "22%", rot: -30, scale: 0.9 },
+  { left: "56%", top: "68%", rot: 18, scale: 1.0 },
+  { left: "63%", top: "20%", rot: -8, scale: 0.85 },
+  { left: "71%", top: "60%", rot: 22, scale: 1.1 },
+  { left: "78%", top: "28%", rot: -18, scale: 0.9 },
+  { left: "85%", top: "72%", rot: 10, scale: 0.95 },
+  { left: "91%", top: "18%", rot: -25, scale: 1.0 },
+  { left: "96%", top: "58%", rot: 15, scale: 0.85 },
+];
+
 const App = () => {
   const [selectedMovieId, setSelectedMovieId] = useState(null);
   const [modalOriginRect, setModalOriginRect] = useState(null);
@@ -22,13 +39,25 @@ const App = () => {
   return (
     <div className="App">
       <section className="app-banner" aria-label="Frida's Movie Corner banner">
-        <span className="app-banner__popcorn" aria-hidden="true">
-          🍿 🍿 🍿
-        </span>
-        <p className="app-banner__title">Frida&apos;s Movie Corner</p>
-        <span className="app-banner__popcorn" aria-hidden="true">
-          🍿 🍿 🍿
-        </span>
+        <div className="app-banner__stripe" />
+        <div className="app-banner__center">
+          {POPCORN.map((p, index) => (
+            <span
+              key={`${p.left}-${p.top}-${index}`}
+              className="app-banner__popcorn-piece"
+              aria-hidden="true"
+              style={{
+                left: p.left,
+                top: p.top,
+                transform: `rotate(${p.rot}deg) scale(${p.scale})`,
+              }}
+            >
+              🍿
+            </span>
+          ))}
+          <p className="app-banner__title">Frida&apos;s Movie Corner</p>
+        </div>
+        <div className="app-banner__stripe" />
       </section>
 
       <main className="gallery-page">
