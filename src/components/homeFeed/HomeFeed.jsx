@@ -19,7 +19,7 @@ const MOODS = [
 const HomeFeed = ({ onMovieClick }) => {
   const [movies, setMovies] = useState([]);
   const [moodMovies, setMoodMovies] = useState([]);
-  const [activeMood, setActiveMood] = useState("fantasy");
+  const [activeMood, setActiveMood] = useState("action");
   const [activeMovieIndex, setActiveMovieIndex] = useState(0);
   const [cardTransitionStage, setCardTransitionStage] = useState("idle");
   const [isLoading, setIsLoading] = useState(true);
