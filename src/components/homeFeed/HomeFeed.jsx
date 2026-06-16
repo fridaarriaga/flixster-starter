@@ -163,7 +163,7 @@ const HomeFeed = ({ onMovieClick }) => {
       ? `${BACKDROP_BASE_URL}${activeMovie.backdrop_path}`
       : "";
   const tiktokSearchUrl = `https://www.tiktok.com/search?q=${encodeURIComponent(
-    `${activeMovie.title || "movie"} movie`
+    `${activeMovie.title || "movie"}`
   )}`;
 
   const moodStyle = { "--mood-color": activeMoodConfig.color };

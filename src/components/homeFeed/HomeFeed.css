@@ -71,7 +71,7 @@
 .home-feed__modal-link {
   position: absolute;
   top: 54px;
-  right: 8px;
+  right: 13px;
   z-index: 5;
   width: 32px;
   height: 32px;
@@ -343,7 +343,7 @@
 
   .home-feed__modal-link {
     top: 49px;
-    right: 7px;
+    right: 11px;
     width: 30px;
     height: 30px;
     font-size: 0.95rem;
