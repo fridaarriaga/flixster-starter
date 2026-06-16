@@ -9,9 +9,9 @@ const CARD_TRANSITION_MS = 450;
 
 const MOODS = [
   { key: "action", label: "Action", genreIds: [28, 12, 878], color: "#2ef5c7" },
-  { key: "funny", label: "Funny", genreIds: [35, 10751, 10402], color: "#f7cd5e" },
+  { key: "funny", label: "Funny", genreIds: [35, 10751], color: "#f7cd5e" },
   { key: "dark", label: "Dark", genreIds: [53, 27, 9648, 80], color: "#8d94ff" },
-  { key: "romance", label: "Romance", genreIds: [10749, 18], color: "#ff77bf" },
+  { key: "romance", label: "Romance", genreIds: [10749], color: "#ff77bf" },
   { key: "thriller", label: "Thriller", genreIds: [53, 9648, 80], color: "#79f0ff" },
   { key: "fantasy", label: "Fantasy", genreIds: [14, 12, 16], color: "#61ff7c" },
 ];
