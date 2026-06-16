@@ -126,9 +126,7 @@ const MovieList = ({ onMovieClick }) => {
         onQueryChange={setQuery}
         onSearch={handleSearch}
         onClear={handleClear}
-        onNowPlaying={handleNowPlaying}
         isBusy={isLoading}
-        isNowPlayingMode={!hasActiveSearch}
       />
 
       <div className="movie-list__sort">

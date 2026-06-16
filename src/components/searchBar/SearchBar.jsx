@@ -1,6 +1,6 @@
 import "./SearchBar.css";
 
-const SearchBar = ({ query, onQueryChange, onSearch, onClear, onNowPlaying, isBusy, isNowPlayingMode }) => {
+const SearchBar = ({ query, onQueryChange, onSearch, onClear, isBusy }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     onSearch();
@@ -18,14 +18,6 @@ const SearchBar = ({ query, onQueryChange, onSearch, onClear, onNowPlaying, isBu
       />
       <button className="search-bar__button" type="submit">
         {isBusy ? "Searching..." : "Search"}
-      </button>
-      <button
-        className="search-bar__button search-bar__button--now-playing"
-        type="button"
-        onClick={onNowPlaying}
-        disabled={isNowPlayingMode && !query.trim() && !isBusy}
-      >
-        Now Playing
       </button>
       <button
         className="search-bar__button search-bar__button--secondary"
