@@ -6,10 +6,12 @@ const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const TMDB_MOVIE_URL = "https://api.themoviedb.org/3/movie";
 const YOUTUBE_WATCH_URL = "https://www.youtube.com/embed";
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
+const ADD_TO_LIST_ICON_URL = "https://static.thenounproject.com/png/1913842-200.png";
+const IN_LIST_ICON_URL = "https://cdn-icons-png.flaticon.com/512/665/665939.png";
 const AI_FALLBACK_MESSAGE =
   "We couldn't generate a recommendation for this one - check out the overview above!";
 
-const MovieModal = ({ movieId, isOpen, onClose, originRect }) => {
+const MovieModal = ({ movieId, isOpen, onClose, originRect, isInMyList = false, onToggleMyList }) => {
   const [movieDetails, setMovieDetails] = useState(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [detailsError, setDetailsError] = useState("");
@@ -348,6 +350,18 @@ Keep it spoiler-free, specific, and plain text only. Don't just repeat the title
             {!isLoadingDetails && !detailsError && movieDetails && (
               <>
                 <h2 id="movie-modal-title">{movieDetails.title}</h2>
+                <button
+                  className="movie-modal__my-list"
+                  type="button"
+                  onClick={() => onToggleMyList?.(movieDetails)}
+                  aria-label={isInMyList ? "Remove from My List" : "Add to My List"}
+                  title={isInMyList ? "In My List" : "Add to My List"}
+                >
+                  <img
+                    src={isInMyList ? IN_LIST_ICON_URL : ADD_TO_LIST_ICON_URL}
+                    alt={isInMyList ? "In My List" : "Add to My List"}
+                  />
+                </button>
                 <p>
                   <strong>Runtime:</strong> {movieDetails.runtime ? `${movieDetails.runtime} min` : "Unknown"}
                 </p>

@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import HomeFeed from "./components/homeFeed/HomeFeed";
 import MovieList from "./components/movieList/MovieList";
 import MovieModal from "./components/movieModal/MovieModal";
+import MyList from "./components/myList/MyList";
 import "./App.css";
 
 const POPCORN = [
@@ -20,11 +21,29 @@ const POPCORN = [
   { left: "91%", top: "18%", rot: -25, scale: 1.0 },
   { left: "96%", top: "58%", rot: 15, scale: 0.85 },
 ];
+const MY_LIST_STORAGE_KEY = "flixster-my-list";
 
 const App = () => {
+  const [myListMovies, setMyListMovies] = useState(() => {
+    try {
+      const saved = window.localStorage.getItem(MY_LIST_STORAGE_KEY);
+      if (!saved) {
+        return [];
+      }
+      const parsed = JSON.parse(saved);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  });
   const [selectedMovieId, setSelectedMovieId] = useState(null);
   const [modalOriginRect, setModalOriginRect] = useState(null);
   const [activeView, setActiveView] = useState("home");
+  const myListIds = useMemo(() => new Set(myListMovies.map((movie) => movie.id)), [myListMovies]);
+
+  useEffect(() => {
+    window.localStorage.setItem(MY_LIST_STORAGE_KEY, JSON.stringify(myListMovies));
+  }, [myListMovies]);
 
   const handleMovieClick = (movieId, originRect) => {
     setModalOriginRect(originRect ?? null);
@@ -34,6 +53,34 @@ const App = () => {
   const handleCloseModal = () => {
     setSelectedMovieId(null);
     setModalOriginRect(null);
+  };
+
+  const handleToggleMyList = (movie) => {
+    if (!movie?.id) {
+      return;
+    }
+
+    setMyListMovies((previous) => {
+      const exists = previous.some((savedMovie) => savedMovie.id === movie.id);
+      if (exists) {
+        return previous.filter((savedMovie) => savedMovie.id !== movie.id);
+      }
+
+      const normalizedMovie = {
+        id: movie.id,
+        title: movie.title || "Untitled movie",
+        poster_path: movie.poster_path ?? null,
+        vote_average: typeof movie.vote_average === "number" ? movie.vote_average : 0,
+        release_date: movie.release_date || "",
+        genre_ids: Array.isArray(movie.genre_ids)
+          ? movie.genre_ids
+          : Array.isArray(movie.genres)
+            ? movie.genres.map((genre) => genre.id).filter(Boolean)
+            : [],
+      };
+
+      return [normalizedMovie, ...previous];
+    });
   };
 
   return (
@@ -76,14 +123,21 @@ const App = () => {
           >
             Gallery
           </button>
+          <button
+            className={`gallery-nav__link ${activeView === "my-list" ? "gallery-nav__link--active" : ""}`}
+            type="button"
+            onClick={() => setActiveView("my-list")}
+          >
+            My List ({myListMovies.length})
+          </button>
         </nav>
 
         <section className="gallery-frame">
-          {activeView === "home" ? (
-            <HomeFeed onMovieClick={handleMovieClick} />
-          ) : (
+          {activeView === "home" && <HomeFeed onMovieClick={handleMovieClick} />}
+          {activeView === "gallery" && (
             <MovieList onMovieClick={handleMovieClick} initialSortOption="vote_average" />
           )}
+          {activeView === "my-list" && <MyList movies={myListMovies} onMovieClick={handleMovieClick} />}
         </section>
       </main>
 
@@ -96,6 +150,8 @@ const App = () => {
         isOpen={Boolean(selectedMovieId)}
         onClose={handleCloseModal}
         originRect={modalOriginRect}
+        isInMyList={myListIds.has(selectedMovieId)}
+        onToggleMyList={handleToggleMyList}
       />
     </div>
   );
