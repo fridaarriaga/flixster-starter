@@ -287,6 +287,14 @@ Keep it spoiler-free, specific, and plain text only. Don't just repeat the title
         onClick={(event) => event.stopPropagation()}
         style={entranceStyle}
       >
+        <button
+          className="movie-modal__close"
+          type="button"
+          onClick={onClose}
+          aria-label="Close modal"
+        >
+          ×
+        </button>
         <div className="movie-modal__layout">
           <section className="movie-modal__media">
             <button

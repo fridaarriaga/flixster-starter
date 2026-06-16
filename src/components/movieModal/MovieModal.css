@@ -27,6 +27,24 @@
   --flip-start-scale-y: 0.6;
 }
 
+.movie-modal__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid #a31a1a;
+  background: rgba(30, 0, 0, 0.86);
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
 .movie-modal__layout {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
