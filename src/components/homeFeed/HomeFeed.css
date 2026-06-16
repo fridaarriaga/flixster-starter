@@ -1,0 +1,399 @@
+.home-feed {
+  --mood-color: #61ff7c;
+  max-width: 1180px;
+  margin: 0 auto;
+  color: #fff;
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  min-height: calc(100vh - 180px);
+  background:
+    radial-gradient(circle at center, color-mix(in srgb, var(--mood-color) 34%, transparent) 0%, transparent 56%),
+    #000;
+  border-radius: 18px;
+  padding: 14px 10px 16px;
+}
+
+.home-feed__mood-title {
+  margin: 0;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #97a0b9;
+  font-size: 0.72rem;
+}
+
+.home-feed__mood-title strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 2rem;
+  color: var(--mood-color);
+  letter-spacing: normal;
+  text-shadow:
+    0 0 12px color-mix(in srgb, var(--mood-color) 70%, #fff),
+    0 0 28px color-mix(in srgb, var(--mood-color) 55%, transparent),
+    0 0 52px color-mix(in srgb, var(--mood-color) 35%, transparent);
+  filter: drop-shadow(0 0 14px color-mix(in srgb, var(--mood-color) 45%, transparent));
+}
+
+.home-feed__wheel-wrap {
+  position: relative;
+  width: min(820px, 100%);
+  min-height: 520px;
+  display: grid;
+  place-items: center;
+}
+
+.home-feed__tiktok-link {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 5;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.45);
+}
+
+.home-feed__tiktok-link img {
+  width: 86%;
+  height: 86%;
+  object-fit: contain;
+  display: block;
+}
+
+.home-feed__orbit-ring {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  width: min(700px, 92vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 120px color-mix(in srgb, var(--mood-color) 28%, transparent);
+  animation: wheel-spin 24s linear infinite;
+}
+
+.home-feed__mood-orbit {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  transform:
+    translate(-50%, -50%)
+    rotate(calc((360deg / var(--count)) * var(--i)))
+    translateY(-305px)
+    rotate(calc(-1 * (360deg / var(--count)) * var(--i)));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(16, 18, 30, 0.7);
+  color: #d8dbe5;
+  font-size: 0.9rem;
+  padding: 8px 14px;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+  animation: mood-orbit-spin 18s linear infinite, mood-orbit-bob 2.8s ease-in-out infinite;
+}
+
+.home-feed__mood-orbit--active {
+  color: #0f1020;
+  border-color: color-mix(in srgb, var(--mood-node-color) 80%, #fff);
+  background: color-mix(in srgb, var(--mood-node-color) 88%, #fff);
+  box-shadow: 0 0 26px color-mix(in srgb, var(--mood-node-color) 65%, transparent);
+}
+
+.home-feed__phone-card {
+  position: relative;
+  z-index: 2;
+  width: min(320px, 86%);
+  border-radius: 22px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  background: #111;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.05),
+    0 18px 34px rgba(0, 0, 0, 0.42),
+    0 0 40px color-mix(in srgb, var(--mood-color) 52%, transparent),
+    0 0 90px color-mix(in srgb, var(--mood-color) 42%, transparent),
+    0 0 150px color-mix(in srgb, var(--mood-color) 26%, transparent);
+  cursor: pointer;
+}
+
+.home-feed__poster {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  display: block;
+  transform: scale(1);
+}
+
+.home-feed__phone-card--advance .home-feed__poster {
+  animation: home-card-cover-pop 320ms ease-out;
+}
+
+.home-feed__poster--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #171717;
+  color: #ddd;
+  height: 380px;
+}
+
+.home-feed__card-overlay {
+  padding: 14px;
+  background: linear-gradient(180deg, #0d0f1f, #0c0d15);
+}
+
+.home-feed__card-overlay h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.home-feed__card-mood {
+  margin: 0 0 6px;
+  color: var(--mood-color);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.home-feed__card-meta {
+  margin: 6px 0 0;
+  color: #a7afc4;
+  font-size: 0.85rem;
+}
+
+.home-feed__card-hint {
+  margin: 12px 0 0;
+  color: color-mix(in srgb, var(--mood-color) 70%, #fff);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.home-feed__mood-pills {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(10, 12, 24, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.home-feed__pill {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: rgba(24, 26, 40, 0.88);
+  color: #d5d8e2;
+  padding: 8px 14px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.home-feed__pill--active {
+  color: #0e1322;
+  border-color: color-mix(in srgb, var(--mood-color) 80%, #fff);
+  background: color-mix(in srgb, var(--mood-color) 88%, #fff);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--mood-color) 48%, transparent);
+}
+
+.home-feed__status {
+  color: #fff;
+  text-align: center;
+  padding: 24px;
+}
+
+.home-feed__status--error {
+  color: #ff8080;
+}
+
+@media (max-width: 780px) {
+  .home-feed {
+    min-height: auto;
+    padding-bottom: 12px;
+  }
+
+  .home-feed__mood-title strong {
+    font-size: 1.5rem;
+  }
+
+  .home-feed__wheel-wrap {
+    min-height: 440px;
+  }
+
+  .home-feed__orbit-ring {
+    width: min(560px, 98vw);
+  }
+
+  .home-feed__mood-orbit {
+    transform:
+      translate(-50%, -50%)
+      rotate(calc((360deg / var(--count)) * var(--i)))
+      translateY(-240px)
+      rotate(calc(-1 * (360deg / var(--count)) * var(--i)));
+    font-size: 0.82rem;
+  }
+
+  .home-feed__poster,
+  .home-feed__poster--placeholder {
+    height: 320px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .home-feed__wheel-wrap {
+    width: min(760px, 100%);
+    min-height: 500px;
+  }
+
+  .home-feed__orbit-ring {
+    width: min(620px, 95vw);
+  }
+
+  .home-feed__mood-orbit {
+    transform:
+      translate(-50%, -50%)
+      rotate(calc((360deg / var(--count)) * var(--i)))
+      translateY(-275px)
+      rotate(calc(-1 * (360deg / var(--count)) * var(--i)));
+    font-size: 0.86rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-feed {
+    padding: 10px 8px 14px;
+  }
+
+  .home-feed__wheel-wrap {
+    min-height: 410px;
+  }
+
+  .home-feed__orbit-ring {
+    width: min(500px, 98vw);
+  }
+
+  .home-feed__mood-orbit {
+    transform:
+      translate(-50%, -50%)
+      rotate(calc((360deg / var(--count)) * var(--i)))
+      translateY(-205px)
+      rotate(calc(-1 * (360deg / var(--count)) * var(--i)));
+    font-size: 0.76rem;
+    padding: 7px 11px;
+  }
+
+  .home-feed__phone-card {
+    width: min(300px, 90%);
+  }
+
+  .home-feed__poster,
+  .home-feed__poster--placeholder {
+    height: 290px;
+  }
+
+  .home-feed__tiktok-link {
+    width: 38px;
+    height: 38px;
+    top: 7px;
+    right: 7px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 430px) {
+  .home-feed__mood-title strong {
+    font-size: 1.25rem;
+  }
+
+  .home-feed__wheel-wrap {
+    min-height: 385px;
+  }
+
+  .home-feed__orbit-ring {
+    width: min(430px, 98vw);
+  }
+
+  .home-feed__mood-orbit {
+    transform:
+      translate(-50%, -50%)
+      rotate(calc((360deg / var(--count)) * var(--i)))
+      translateY(-175px)
+      rotate(calc(-1 * (360deg / var(--count)) * var(--i)));
+    font-size: 0.7rem;
+    padding: 6px 9px;
+  }
+
+  .home-feed__phone-card {
+    width: min(280px, 92%);
+  }
+
+  .home-feed__poster,
+  .home-feed__poster--placeholder {
+    height: 260px;
+  }
+}
+
+@keyframes wheel-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes mood-orbit-spin {
+  from {
+    transform:
+      translate(-50%, -50%)
+      rotate(calc((360deg / var(--count)) * var(--i)))
+      translateY(-305px)
+      rotate(calc(-1 * (360deg / var(--count)) * var(--i)));
+  }
+  to {
+    transform:
+      translate(-50%, -50%)
+      rotate(calc((360deg / var(--count)) * var(--i) + 1turn))
+      translateY(-305px)
+      rotate(calc(-1 * (360deg / var(--count)) * var(--i) - 1turn));
+  }
+}
+
+@keyframes mood-orbit-bob {
+  0%,
+  100% {
+    filter: brightness(0.95);
+  }
+  50% {
+    filter: brightness(1.15);
+  }
+}
+
+@keyframes home-card-cover-pop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
