@@ -5,6 +5,7 @@ const TMDB_NOW_PLAYING_URL = "https://api.themoviedb.org/3/movie/now_playing";
 const TMDB_DISCOVER_URL = "https://api.themoviedb.org/3/discover/movie";
 const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/w780";
 const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
+const CARD_TRANSITION_MS = 450;
 
 const MOODS = [
   { key: "action", label: "Action", genreIds: [28, 12, 878], color: "#2ef5c7" },
@@ -20,12 +21,13 @@ const HomeFeed = ({ onMovieClick }) => {
   const [moodMovies, setMoodMovies] = useState([]);
   const [activeMood, setActiveMood] = useState("fantasy");
   const [activeMovieIndex, setActiveMovieIndex] = useState(0);
-  const [isCardAdvancing, setIsCardAdvancing] = useState(false);
+  const [cardTransitionStage, setCardTransitionStage] = useState("idle");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const lastAdvanceAtRef = useRef(0);
-  const advanceTimeoutRef = useRef(null);
-  const resetAdvanceTimeoutRef = useRef(null);
+  const pendingNextIndexRef = useRef(null);
+  const pendingMoodRef = useRef(null);
+  const exitTimerRef = useRef(null);
+  const enterTimerRef = useRef(null);
 
   useEffect(() => {
     const fetchFeedMovies = async () => {
@@ -139,11 +141,11 @@ const HomeFeed = ({ onMovieClick }) => {
 
   useEffect(() => {
     return () => {
-      if (advanceTimeoutRef.current) {
-        window.clearTimeout(advanceTimeoutRef.current);
+      if (exitTimerRef.current) {
+        window.clearTimeout(exitTimerRef.current);
       }
-      if (resetAdvanceTimeoutRef.current) {
-        window.clearTimeout(resetAdvanceTimeoutRef.current);
+      if (enterTimerRef.current) {
+        window.clearTimeout(enterTimerRef.current);
       }
     };
   }, []);
@@ -165,27 +167,44 @@ const HomeFeed = ({ onMovieClick }) => {
   )}`;
 
   const moodStyle = { "--mood-color": activeMoodConfig.color };
-  const showNextMovieInMood = () => {
+
+  const startCardTransition = (onSwap) => {
+    if (cardTransitionStage !== "idle") {
+      return;
+    }
+
+    setCardTransitionStage("exiting");
+
+    exitTimerRef.current = window.setTimeout(() => {
+      onSwap();
+      setCardTransitionStage("entering");
+
+      enterTimerRef.current = window.setTimeout(() => {
+        setCardTransitionStage("idle");
+      }, CARD_TRANSITION_MS);
+    }, CARD_TRANSITION_MS);
+  };
+
+  const handleAdvanceTrigger = () => {
     if (activePool.length <= 1) {
       return;
     }
-    setActiveMovieIndex((currentIndex) => (currentIndex + 1) % activePool.length);
+    pendingNextIndexRef.current = (activeMovieIndex + 1) % activePool.length;
+    startCardTransition(() => {
+      setActiveMovieIndex(pendingNextIndexRef.current ?? 0);
+    });
   };
-  const handleAdvanceTrigger = () => {
-    const now = Date.now();
-    if (now - lastAdvanceAtRef.current < 420 || isCardAdvancing) {
+
+  const handleMoodChange = (nextMood) => {
+    if (!nextMood || nextMood === activeMood) {
       return;
     }
-    lastAdvanceAtRef.current = now;
-    setIsCardAdvancing(true);
 
-    advanceTimeoutRef.current = window.setTimeout(() => {
-      showNextMovieInMood();
-    }, 150);
-
-    resetAdvanceTimeoutRef.current = window.setTimeout(() => {
-      setIsCardAdvancing(false);
-    }, 360);
+    pendingMoodRef.current = nextMood;
+    startCardTransition(() => {
+      setActiveMood(pendingMoodRef.current ?? nextMood);
+      setActiveMovieIndex(0);
+    });
   };
 
   return (
@@ -203,14 +222,20 @@ const HomeFeed = ({ onMovieClick }) => {
             type="button"
             className={`home-feed__mood-orbit ${activeMood === mood.key ? "home-feed__mood-orbit--active" : ""}`}
             style={{ "--i": index, "--count": MOODS.length, "--mood-node-color": mood.color }}
-            onClick={() => setActiveMood(mood.key)}
+            onClick={() => handleMoodChange(mood.key)}
           >
             {mood.label}
           </button>
         ))}
 
         <article
-          className={`home-feed__phone-card ${isCardAdvancing ? "home-feed__phone-card--advance" : ""}`}
+          className={`home-feed__phone-card ${
+            cardTransitionStage === "exiting"
+              ? "home-feed__phone-card--exit"
+              : cardTransitionStage === "entering"
+                ? "home-feed__phone-card--enter"
+                : ""
+          }`}
           role="button"
           tabIndex={0}
           onPointerUp={handleAdvanceTrigger}
@@ -256,7 +281,7 @@ const HomeFeed = ({ onMovieClick }) => {
             key={mood.key}
             type="button"
             className={`home-feed__pill ${activeMood === mood.key ? "home-feed__pill--active" : ""}`}
-            onClick={() => setActiveMood(mood.key)}
+            onClick={() => handleMoodChange(mood.key)}
           >
             {mood.label}
           </button>
